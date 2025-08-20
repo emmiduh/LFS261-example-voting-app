@@ -189,8 +189,9 @@ pipeline{
               docker.withRegistry('https://index.docker.io/v1/', 'dockerlogin') {
                   // ./vote is the path to the Dockerfile that Jenkins will find from the Github repo
                   def voteImage = docker.build("emmiduh93/vote:v${env.BUILD_ID}", "./vote")
+                  def safeBranch = env.BRANCH_NAME.replaceAll('[^a-zA-Z0-9_.-]', '_')
                   voteImage.push()
-                  voteImage.push("${env.BRANCH_NAME}")
+                  voteImage.push(safeBranch)
                   voteImage.push("latest")
               }
             }
